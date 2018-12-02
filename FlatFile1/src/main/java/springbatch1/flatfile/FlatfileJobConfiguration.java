@@ -8,9 +8,6 @@ import org.springframework.batch.core.configuration.annotation.EnableBatchProces
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
 import org.springframework.batch.core.configuration.annotation.StepScope;
-import org.springframework.batch.core.job.builder.FlowBuilder;
-import org.springframework.batch.core.job.builder.FlowJobBuilder;
-import org.springframework.batch.core.job.flow.FlowJob;
 import org.springframework.batch.core.launch.JobLauncher;
 import org.springframework.batch.item.file.FlatFileItemReader;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,7 +29,6 @@ public class FlatfileJobConfiguration {
 	
 	@Autowired
 	private FileWriter fileWriter;
-	
 	@Autowired
 	private FileType02Writer fileType02Writer;
 	
@@ -40,10 +36,9 @@ public class FlatfileJobConfiguration {
 	private JobLauncher jobLauncher;
 	
 	@Bean
-	public FlowJobBuilder flatfileToDbWithParametersJob() throws FileNotFoundException{
+	public Job flatfileToDbWithParametersJob() throws FileNotFoundException{
 		return jobBuilders.get("flatfileToDbWithParametersJob")
-				.flow(step())
-		//		.start(step())		
+				.start(step())
 				.build();
 	}
 	
@@ -55,47 +50,6 @@ public class FlatfileJobConfiguration {
 				.writer(fileWriter)
 				.build();
 	}
-	
-	@Bean
-	public Step step1() throws FileNotFoundException{
-		return stepBuilders.get("step")
-				.<FileType02,FileType02>chunk(1)
-    			.reader(readerType02())
-				.writer(fileType02Writer)
-				.build();
-	}
-	
-	@Bean
-	public Job job() {
-	    return jobBuilderFactory.get("job")
-	        .start(splitFlow())
-	        .next(step4())
-	        .build()        //builds FlowJobBuilder instance
-	        .build();       //builds Job instance
-	}
-
-	@Bean
-	public Flow splitFlow() {
-	    return new FlowBuilder<SimpleFlow>("splitFlow")
-	        .split(taskExecutor())
-	        .add(flow1(), flow2())
-	        .build();
-	}
-
-	@Bean
-	public Flow flow1() {
-	    return new FlowBuilder<FileType01>("flow1")
-	        .start(step())
-	        .build();
-	}
-
-	@Bean
-	public Flow flow2() {
-	    return new FlowBuilder<FileType02>("flow2")
-	        .start(step1())
-	        .build();
-	}
-	
 	
 	@Bean
 	@StepScope
