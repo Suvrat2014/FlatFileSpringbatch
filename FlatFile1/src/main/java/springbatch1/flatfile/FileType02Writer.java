@@ -3,7 +3,9 @@ package springbatch1.flatfile;
 import java.util.List;
 
 import org.springframework.batch.item.ItemWriter;
+import org.springframework.stereotype.Component;
 
+@Component
 public class FileType02Writer implements ItemWriter<FileType02> {
 
 	@Override
