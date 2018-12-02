@@ -1,0 +1,7 @@
+springbatch1/flatfile/FileWriter.class
+springbatch1/flatfile/FileType01.class
+springbatch1/flatfile/CustomLineMapper.class
+springbatch1/flatfile/CustomBufferedReaderFactory.class
+springbatch1/flatfile/FlatfileJobConfiguration.class
+springbatch1/flatfile/CustomFlatFileItemReader.class
+springbatch1/flatfile/FlatFileJobRunner.class
